@@ -1,0 +1,4 @@
+.env
+monscript/.env
+venv/bin/activate
+uploads/*
