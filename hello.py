@@ -3,6 +3,7 @@ from render import Render
 from fichier import Fichier
 import subprocess
 from myfunc import Myfunc
+from myrecording import Myrecording
 class Hello(Myfunc):
   def __init__(self,path):
     self.path=path
@@ -24,7 +25,7 @@ class Hello(Myfunc):
     print("hi there")
     return self
   def create(self,myscrit):
-    rec=Myrecording().new(self.get_mydata()(self.recparams))
+    rec=Myrecording(myscrit).new(self.get_mydata()(self.recparams))
     self.figure.set_content("<a>redirected permanently</a>")
 
     if rec.create():

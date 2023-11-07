@@ -2,11 +2,6 @@ import re
 from hello import Hello
 from erreur import Erreur
 from render import Render
-from mybing import Bing
-from traduction import Traduction
-from mypic import Pic
-from music import Music
-from son import Son
 from javascript import Js
 
 
@@ -54,7 +49,7 @@ r"/myshop$":"Hello#myshop",
             if mydata:
 
                 loc["myvar"].set_mydata(mydata)
-                print(loc["mydata"])
+                print(loc["myvar"].get_mydata())
                 print("=mydata")
 
             exec("myvar=myvar.work(params=myparams)",globals(),loc)

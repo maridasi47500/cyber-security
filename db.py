@@ -48,7 +48,7 @@ class Db():
       finally:
           if conn:
               conn.close()
-  def get_items(self,name,note):
+  def get_items(self):
       """
       Create a new project into the projects table
       :param conn:
