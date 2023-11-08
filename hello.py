@@ -9,7 +9,7 @@ class Hello(Myfunc):
     self.path=path
     self.title="aide informatique"
     self.figure=Render(self.title)
-    self.recparams=["name","image"]
+    self.recparams=["name","image","price"]
   def get_figure(self):
     return self.figure
   def new(self,myscrit):
@@ -25,7 +25,9 @@ class Hello(Myfunc):
     print("hi there")
     return self
   def create(self,myscrit):
-    rec=Myrecording(myscrit).new(self.get_mydata()(self.recparams))
+    xx=self.get_mydata()(uploads=self.recparams)
+    print("create with my params : ", xx)
+    rec=Myrecording(xx)
     self.figure.set_content("<a>redirected permanently</a>")
 
     if rec.create():

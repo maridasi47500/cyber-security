@@ -12,7 +12,8 @@ class Myrecording(Mymodel):
     def get_image(self):
         return self.image
     def create(self):
-        x=Db().createitem((self.title, self.image, self.price))
+        x=Db().createitem((self.name, self.image,self.price))
+        return x
     def set_price(self,string):
         self.price=string
     def get_price(self,string):

@@ -34,7 +34,6 @@ class S(BaseHTTPRequestHandler):
     def deal_post_data(self,uploads=False):
         if uploads:
           myuploads={}
-          uploads=myProgram.get_uploads()
           ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
           print(pdict)
           pdict['boundary'] = bytes(pdict['boundary'], "utf-8")

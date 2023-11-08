@@ -27,27 +27,6 @@ class Db():
           c.execute(create_table_sql)
       except Error as e:
           print(e)
-  def get_notes_instrument(self,name):
-      """
-      Create a new project into the projects table
-      :param conn:
-      :param project:
-      :return: project id
-      """
-      try:
-        sql = ''' select musicalinstruments.name, notes.frequency, notes.note from musicalinstruments left join notes on notes.musicalinstrument_id = musicalinstruments.id where name = ?'''
-        conn = sqlite3.connect(self.db)
-        cur = conn.cursor()
-        cur.row_factory = sqlite3.Row
-        cur.execute(sql,(name,))
-        conn.commit()
-        return cur.fetchall()
-      except Error as e:
-        print(e)
-        return []
-      finally:
-          if conn:
-              conn.close()
   def get_items(self):
       """
       Create a new project into the projects table
@@ -60,15 +39,16 @@ class Db():
         conn = sqlite3.connect(self.db)
         cur = conn.cursor()
         cur.row_factory = sqlite3.Row
-        cur.execute(sql,(note, name))
+        cur.execute(sql)
         conn.commit()
-        return cur.fetchall()
+        myitems= cur.fetchall()
       except Error as e:
         print(e)
-        return []
+        myitems= []
       finally:
           if conn:
               conn.close()
+          return myitems
   def get_othermusicalinstruments(self):
       """
       Create a new project into the projects table
@@ -147,13 +127,14 @@ class Db():
         cur = conn.cursor()
         cur.execute(sql, project)
         conn.commit()
-        return cur.lastrowid
+        aa= cur.lastrowid
       except Error as e:
         print(e)
-        return []
+        aa= None
       finally:
           if conn:
               conn.close()
+          return aa
   def __init__(self):
 
 
