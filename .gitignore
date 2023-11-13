@@ -2,3 +2,4 @@
 monscript/.env
 venv/bin/activate
 uploads/*
+__pycache__
