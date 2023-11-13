@@ -88,7 +88,7 @@ class S(BaseHTTPRequestHandler):
         elif js:
           self.send_header('Content-type', 'text/javascript')
         elif css:
-          self.send_header('Content-type', 'text/stylesheet')
+          self.send_header('Content-type', 'text/css')
 
         else:
 
