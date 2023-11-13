@@ -26,3 +26,12 @@ height:100px;
   -ms-transform: translate(-50%,-50%);
 }
 
+input[type="search"] {
+	    border-radius: 777777px;
+	        padding-left: 10px;
+		    padding-right: 10px;
+		        width: 354px;
+		}
+		div#my-content {
+			text-align:center;
+		}
