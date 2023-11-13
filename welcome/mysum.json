@@ -1,0 +1,2 @@
+{"mysum": "<%=Db().get_sum(my_params["mydate"])%>"
+}

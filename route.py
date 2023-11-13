@@ -4,6 +4,7 @@ from erreur import Erreur
 from mypic import Pic
 from render import Render
 from javascript import Js
+from stylesheet import Css
 
 
 class Route():
@@ -14,6 +15,8 @@ r"/$":"Hello#hi",
 r"/bienvenue$":"Hello#hi",
 r"/new$":"Hello#new",
 r"/create$":"Hello#create",
+r"/dates$":"Hello#dates",
+r"/mysum$":"Hello#mysum",
 r"/myshop$":"Hello#myshop",
 
 }
@@ -25,8 +28,14 @@ r"/myshop$":"Hello#myshop",
     if myroute.endswith("ico"):
         myProgram=Pic(myroute)
         return myProgram
+    elif myroute.endswith("png"):
+        myProgram=Pic(myroute)
+        return myProgram
     elif myroute.endswith(".wav"):
         myProgram=Son(name=myroute)
+        return myProgram
+    elif myroute.endswith(".css"):
+        myProgram=Css(name=myroute)
         return myProgram
     elif myroute.endswith(".js"):
         myProgram=Js(name=myroute)

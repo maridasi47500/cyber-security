@@ -1,0 +1,1 @@
+{"dates":[<%=render_collection_json(path="./welcome", view="_date.json", mycollection=Db().get_dates(), erreur="", as_="item")%>]}

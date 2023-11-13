@@ -16,6 +16,48 @@ class Render():
     self.my_params[name]=param
   def set_collection(self,name,collection):
     self.collection[name]=collection
+  def render_collection_json(self,path,view,mycollection,as_,erreur):
+    try:
+      myview=open(os.path.abspath(path+"/"+view), "r").read()
+      string=""
+      count=0
+      print(len(mycollection),"my collection")
+      paspremier=False
+      i=1
+      lencollection=len(mycollection)
+      paspremier=False
+      for res in mycollection:
+        pasdernier=i<lencollection
+        i+=1
+        for x in myview.split("<%="):
+           if "%>" not in x: 
+             string+=x
+             continue
+           else:
+             y=x.split("%>")
+             myexpr=y[0]
+             print(myexpr)
+             try:
+               mystr=y[1]
+             except:
+               mystr=""
+             try:
+               loc={as_: res,"pasdernier":pasdernier,"paspremier": paspremier}
+
+               print(loc)
+               string+=str(eval(myexpr, globals(), loc))
+             except:
+               string+=""
+
+             string+=mystr
+        paspremier=True
+
+
+
+
+      return string
+    except Exception as e:
+      return "<p>{erreur}</p>".format(erreur=(erreur+str(e)))
   def render_collection(self,path,view,mycollection,as_,erreur):
     try:
       myview=open(os.path.abspath(path+"/"+view), "r").read()
@@ -38,7 +80,7 @@ class Render():
              try:
                loc={as_: res}
                print(loc)
-               string+=eval(myexpr, globals(), loc)
+               string+=str(eval(myexpr, globals(), loc))
              except:
                string+=""
              string+=mystr
@@ -62,7 +104,7 @@ class Render():
        if myinclude:
          try:
            print(myexpr, "monexpression")
-           loc={"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
+           loc={"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
            exec("myres="+myexpr,globals(),loc)
            if type(loc["myres"]) is bytes:
              string+=loc["myres"].decode()
@@ -82,6 +124,18 @@ class Render():
     return self.title
   def get_body(self):
     return self.body
+  def set_json(self,mybody):
+    self.template=False
+    if len(mybody) > 0:
+      if type(mybody) is bytes:
+        print(mybody)
+        self.body+=str(mybody)
+      else:
+        self.body+=mybody
+    else:
+      self.body+=''
+  def set_body(self,mybody):
+      self.body=mybody
   def set_content(self,mybody):
     if len(mybody) > 0:
       if type(mybody) is bytes:
@@ -94,8 +148,8 @@ class Render():
   def ajouter_a_mes_mots(self,mot):
     self.body += mot
   def render_figure(self):
-
-    template=open(self.template,"r").read()
-    self.body= template.format(mots=self.get_headingone(),debutdemesmots=self.get_title(),partiedemesmot=self.get_body())
+    if self.template:
+      template=open(self.template,"r").read()
+      self.body= template.format(mots=self.get_headingone(),debutdemesmots=self.get_title(),partiedemesmot=self.get_body())
     self.render_body()
     return self.body

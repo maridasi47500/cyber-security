@@ -7,11 +7,17 @@ from myrecording import Myrecording
 class Hello(Myfunc):
   def __init__(self,path):
     self.path=path
-    self.title="aide informatique"
+    self.title="my thrift shop"
     self.figure=Render(self.title)
-    self.recparams=["name","image","price"]
+    self.recparams=["name","image","price","date"]
   def get_figure(self):
     return self.figure
+  def dates(self,myscrit):
+    self.set_json(True)
+    self.figure.set_body("")
+    self.figure.set_json(Fichier("./welcome","date.json").lire())
+    print("hi there")
+    return self
   def new(self,myscrit):
     self.figure.set_content(Fichier("./welcome","new.html").lire())
     print("hi there")
@@ -23,6 +29,15 @@ class Hello(Myfunc):
   def hi(self,myscrit):
     self.figure.set_content(Fichier("./welcome","index.html").lire())
     print("hi there")
+    return self
+  def mysum(self,myscrit):
+    self.set_json(True)
+    self.figure.set_body("")
+    xx=self.get_mydata()(uploads=["date"])
+    print(xx,"xx")
+    self.figure.set_my_params("mydate",xx["date"])
+    self.figure.set_json(Fichier("./welcome","mysum.json").lire())
+
     return self
   def create(self,myscrit):
     xx=self.get_mydata()(uploads=self.recparams)

@@ -27,6 +27,58 @@ class Db():
           c.execute(create_table_sql)
       except Error as e:
           print(e)
+  def get_sum(self,x):
+      """
+      Create a new project into the projects table
+      :param conn:
+      :param project:
+      :return: project id
+      """
+      try:
+        sql = ''' select sum(case when price is not null then price else 0 end) as mysum from items group by date having date = ?'''
+        conn = sqlite3.connect(self.db)
+        cur = conn.cursor()
+        cur.row_factory = sqlite3.Row
+        myval=None
+        if x:
+          cur.execute(sql,(str(x),))
+          conn.commit()
+          myitems= cur.fetchone()
+          myval=myitems["mysum"]
+        else:
+          myval=0
+        if not myval:
+          myval=0
+
+      except Error as e:
+        print(e)
+        myval="0"
+      finally:
+        if conn:
+          conn.close()
+        return str(myval) if myval is not None else "0"
+  def get_dates(self):
+      """
+      Create a new project into the projects table
+      :param conn:
+      :param project:
+      :return: project id
+      """
+      try:
+        sql = ''' select date from items group by date'''
+        conn = sqlite3.connect(self.db)
+        cur = conn.cursor()
+        cur.row_factory = sqlite3.Row
+        cur.execute(sql)
+        conn.commit()
+        myitems= cur.fetchall()
+      except Error as e:
+        print(e)
+        myitems= []
+      finally:
+          if conn:
+              conn.close()
+          return myitems
   def get_items(self):
       """
       Create a new project into the projects table
@@ -121,8 +173,8 @@ class Db():
       :return: project id
       """
       try:
-        sql = ''' INSERT OR IGNORE INTO items(name,image, price)
-                  VALUES(?,?,?) '''
+        sql = ''' INSERT OR IGNORE INTO items(name,image, price,date)
+                  VALUES(?,?,?,?) '''
         conn = sqlite3.connect(self.db)
         cur = conn.cursor()
         cur.execute(sql, project)
@@ -140,9 +192,10 @@ class Db():
 
     sql1 = """ CREATE TABLE IF NOT EXISTS items (
                                         id integer PRIMARY KEY autoincrement,
-                                        name text NOT NULL unique,
-                                        image text NOT NULL unique,
-                                        price float NOT NULL unique
+                                        name text NOT NULL,
+                                        image text NOT NULL,
+                                        price float NOT NULL,
+                                        date date NOT NULL 
                                     ); """
 
     self.create_connection(self.db)

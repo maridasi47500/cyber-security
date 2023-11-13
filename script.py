@@ -36,7 +36,10 @@ class S(BaseHTTPRequestHandler):
           myuploads={}
           ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
           print(pdict)
-          pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
+          try:
+            pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
+          except:
+            pdict['boundary'] = bytes("", "utf-8")
           pdict['CONTENT-LENGTH'] = int(self.headers['Content-Length'])
           print(ctype, "type of form")
           if ctype == 'multipart/form-data':
@@ -51,7 +54,7 @@ class S(BaseHTTPRequestHandler):
 
                       try:
                         if form[upload].filename:
-                          myuploads[upload]={upload:form[upload]}
+                          myuploads[upload]=form[upload]
                         else:
                           print("my name")
                           print(form[upload].value)
@@ -69,7 +72,7 @@ class S(BaseHTTPRequestHandler):
           #return (True, "Files uploaded")
           return myuploads
 
-    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False):
+    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False):
         if redirect:
           self.send_response(301)
           self.send_header('Location', redirect) 
@@ -80,8 +83,12 @@ class S(BaseHTTPRequestHandler):
           self.send_header('Content-type', 'image/'+pic)
         elif music:
           self.send_header('Content-type', 'audio/'+music)
+        elif json:
+          self.send_header('Content-type', 'application/json')
         elif js:
           self.send_header('Content-type', 'text/javascript')
+        elif css:
+          self.send_header('Content-type', 'text/stylesheet')
 
         else:
 
@@ -115,8 +122,7 @@ class S(BaseHTTPRequestHandler):
            print("myparams")
            myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False)
 
-           myProgram.run()
-           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect())
+           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
            
            print(myProgram, "y mrograù")
            html=myProgram.get_html()
@@ -150,14 +156,13 @@ class S(BaseHTTPRequestHandler):
           logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                  str(self.path), str(self.headers), post_data)
           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams={},mydata=self.deal_post_data)
-          myProgram.run()
-          self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect())
+          self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
           print(myProgram,post_data, "y mrograù")
           html=myProgram.get_html()
           #print(html)
           self.wfile.write(bytes(html))
 
-def run(server_class=HTTPServer, handler_class=S, port=8080):
+def run(server_class=HTTPServer, handler_class=S, port=8081):
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)

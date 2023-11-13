@@ -1,2 +1,27 @@
+<table>
+
 <%=render_collection(path="./welcome", view="_item.html", mycollection=Db().get_items(), erreur="pas d'articles", as_="item")%>
+</table>
+<button type="button" id="button1">faisons 1 calcul</button>
+<div id="overlay" >
+<div id="div1" class="div1" >
+<a href="javascript:void(0)" class="close">X</a>
+<form id="mysum">
+<div class="field">
+calcul:
+<label>
+date
+</label>
+<select name="date" id="select1">
+</select>
+</div>
+<div class="actions">
+<input type="submit" name="ok" value="calculer"/>
+</div>
+</form>
+<div id="result">
+0$
+</div>
+</div>
+</div>
 

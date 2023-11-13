@@ -4,13 +4,16 @@ from subprocess import check_output as runmyscript
 class Myfunc():
     pic=False
     js=False
+    css=False
     mymusic=False
+    json=False
     figure=Render("hi") 
     upload=False
     redirect=False
     myfile=False
     mydata=False
     myargs=False
+    someparam={}
     my_params=figure.get_my_params()
     myattributes=[]
     
@@ -18,10 +21,24 @@ class Myfunc():
     run=False
     path=False
     runthisprogram=False
+    def set_someparam(self,x,y):
+        self.someparam[x]=y
+    def get_someparams(self):
+        return self.someparam
+    def get_someparam(self,x):
+        return self.someparam[x]
     def set_myargs(self,x):
         self.myargs=x
     def get_myargs(self):
         return self.myargs
+    def set_json(self,x):
+        self.json=x
+    def get_json(self):
+        return self.json
+    def set_css(self,x):
+        self.css=x
+    def get_css(self):
+        return self.css
     def set_redirect(self,x):
         self.redirect=x
     def get_redirect(self):

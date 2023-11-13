@@ -12,15 +12,19 @@ class Myrecording(Mymodel):
     def get_image(self):
         return self.image
     def create(self):
-        x=Db().createitem((self.name, self.image,self.price))
+        x=Db().createitem((self.name, self.image,self.price,self.date))
         return x
     def set_price(self,string):
         self.price=string
     def get_price(self,string):
         return self.price
-    def set_title(self,string):
-        self.title=string
-    def get_title(self,string):
-        return self.title
+    def set_name(self,string):
+        self.name=string
+    def get_name(self,string):
+        return self.name
 
+    def set_date(self,string):
+        self.date=string
+    def get_date(self,string):
+        return self.date
 
