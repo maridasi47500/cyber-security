@@ -1,5 +1,6 @@
 import re
 from hello import Hello
+from search import Search
 from erreur import Erreur
 from mypic import Pic
 from render import Render

@@ -24,6 +24,7 @@ class Hello(Myfunc):
     return self
   def email(self,myscrit):
     self.figure.set_content(Fichier("./welcome","email.html").lire())
+    self.figure.set_title("Se connecter à la boîte mail")
     print("hi there")
     return self
   def myshop(self,myscrit):
@@ -33,7 +34,8 @@ class Hello(Myfunc):
   def hi(self,myscrit):
     try:
       if myscrit["s"] is not None:
-        self.figure.set_my_params("s",myscrit["s"])
+        self.figure.set_my_params("s",myscrit["s"][0])
+        self.figure.set_template("search.html")
         myhtml="search.html"
     except:
       myhtml="index.html"

@@ -11,12 +11,26 @@
 <link rel="stylesheet" href="/css/application.css"/>
 </head>
 <body>
+
+	<div id="my-content">
+
+									        </div>
 	<nav class="navbar navbar-expand-lg bg-body-tertiary">
 		  <div class="container-fluid">
+			  <a class="navbar-brand" href="/"><span style="color: red">g</span><span style="color: yellow">O</span><span style="color: blue">O</span><span style="color: Yellow">G</span><span style="color: blue">L</span><span style="color: green">e</span></a>
 						        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 								      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 									              <li class="nav-item">
-											                <a class="nav-link active" aria-current="page" href="/">Web</a>
+											      <a class="nav-link active" aria-current="page" href="/"><div id="my-content">
+											              <form>
+													      <div class="field">
+														      <input type="search" value="<%=my_params['s']%>" name="s" results />
+											              </div>
+												      <div class="field">
+													      <input type="submit" value="Recherche google" name="ok" />
+											              </div>
+											              </form>
+											              </div></a>
 													        </li>
 																																								      </ul>
 																																								            <form class="d-flex" action="/email">
@@ -26,6 +40,21 @@
 																																													      </div>
 																																													        </div>
 	</nav>
+	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+		  <div class="container-fluid">
+
+
+						        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+								      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+									              <li class="nav-item">
+											                <a class="nav-link active" aria-current="page" href="/">Web</a>
+													        </li>
+																																								      </ul>
+
+																																													      </div>
+																																													        </div>
+	</nav>
+
 
 
 <h1>{mots}</h1>

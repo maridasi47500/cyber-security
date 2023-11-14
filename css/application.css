@@ -35,3 +35,10 @@ input[type="search"] {
 		div#my-content {
 			text-align:center;
 		}
+		img.myiconsite {
+			    border: 1px solid black;
+			        border-radius: 111111px;
+				    width: 20px;
+				        height: 20px;
+					    padding: 3px;
+				    }

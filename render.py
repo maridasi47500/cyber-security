@@ -3,10 +3,10 @@ from mesmots import Mesmots
 import os
 from db import Db
 class Render():
-  def __init__(self,title):
+  def __init__(self,title,template="index.html"):
     self.title=title
     self.body=title
-    self.template="./template/index.html"
+    self.template="./template/"+template
     self.headingone=title
     self.collection={}
     self.my_params={"myoutput":""}
@@ -119,6 +119,8 @@ class Render():
        else:
          string+=myexpr
     self.body=string
+  def set_title(self,x):
+    self.title=x
   def get_title(self):
     return self.title
   def get_headingone(self):
@@ -135,6 +137,8 @@ class Render():
         self.body+=mybody
     else:
       self.body+=''
+  def set_template(self,mybody):
+      self.template="./template/"+mybody
   def set_body(self,mybody):
       self.body=mybody
   def set_content(self,mybody):

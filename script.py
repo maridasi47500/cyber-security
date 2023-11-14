@@ -187,7 +187,7 @@ def run(server_class=ThreadedHTTPServer, handler_class=S, port=8081):
     #    pass
     #httpd.server_close()
     #logging.info('Stopping httpd...\n')
-    _test(handler_class,server_class)
+    _test(handler_class,server_class,port=port)
 
 if __name__ == '__main__':
     from sys import argv
