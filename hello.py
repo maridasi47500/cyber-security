@@ -22,13 +22,24 @@ class Hello(Myfunc):
     self.figure.set_content(Fichier("./welcome","new.html").lire())
     print("hi there")
     return self
+  def email(self,myscrit):
+    self.figure.set_content(Fichier("./welcome","email.html").lire())
+    print("hi there")
+    return self
   def myshop(self,myscrit):
     self.figure.set_content(Fichier("./welcome","myshop.html").lire())
     print("hi there")
     return self
   def hi(self,myscrit):
-    self.figure.set_content(Fichier("./welcome","index.html").lire())
-    print("hi there")
+    try:
+      if myscrit["s"] is not None:
+        self.figure.set_my_params("s",myscrit["s"])
+        myhtml="search.html"
+    except:
+      myhtml="index.html"
+
+      print("hi there")
+    self.figure.set_content(Fichier("./welcome",myhtml).lire())
     return self
   def mysum(self,myscrit):
     self.set_json(True)

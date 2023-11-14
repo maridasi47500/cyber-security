@@ -12,8 +12,9 @@ class Route():
     self.params={}
     self.route={
 r"/$":"Hello#hi",
+r"/?s=(.*?)$":"Hello#search",
 r"/bienvenue$":"Hello#hi",
-r"/new$":"Hello#new",
+r"/email$":"Hello#email",
 r"/create$":"Hello#create",
 r"/dates$":"Hello#dates",
 r"/mysum$":"Hello#mysum",

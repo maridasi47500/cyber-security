@@ -1,76 +1,156 @@
-
-from __future__ import division
-import re
-from render import Render
 from fichier import Fichier
-import subprocess
-import urllib
-from myfunc import Myfunc
+from mesmots import Mesmots
+import os
 from db import Db
-from myrecording import Myrecording
+class Render():
+  def __init__(self,title):
+    self.title=title
+    self.body=title
+    self.template="./template/index.html"
+    self.headingone=title
+    self.collection={}
+    self.my_params={"myoutput":""}
+    self.collection_string=""
+  def get_my_params(self):
+    return self.my_params
+  def set_my_params(self,name,param):
+    self.my_params[name]=param
+  def set_collection(self,name,collection):
+    self.collection[name]=collection
+  def render_collection_json(self,path,view,mycollection,as_,erreur):
+    try:
+      myview=open(os.path.abspath(path+"/"+view), "r").read()
+      string=""
+      count=0
+      print(len(mycollection),"my collection")
+      paspremier=False
+      i=1
+      lencollection=len(mycollection)
+      paspremier=False
+      for res in mycollection:
+        pasdernier=i<lencollection
+        i+=1
+        for x in myview.split("<%="):
+           if "%>" not in x: 
+             string+=x
+             continue
+           else:
+             y=x.split("%>")
+             myexpr=y[0]
+             print(myexpr)
+             try:
+               mystr=y[1]
+             except:
+               mystr=""
+             try:
+               loc={as_: res,"pasdernier":pasdernier,"paspremier": paspremier}
+
+               print(loc)
+               string+=str(eval(myexpr, globals(), loc))
+             except:
+               string+=""
+
+             string+=mystr
+        paspremier=True
 
 
-import numpy as np
-from scipy.io.wavfile import write
-class Music(Myfunc):
-  def __init__(self,path):
-    self.path=path
-    self.title="aide informatique"
-    self.figure=Render(self.title)
-    self.results=Render(self.title)
-    self.upload=False
-    self.recparams=["recording", "name"]
-  def tunerinstrument(self,params):
-    self.figure.set_content(Fichier("./music","tuner.html").lire())
-
-    self.figure.ajouter_a_mes_mots("sauver cet enregistrement dans cette page puis voir le morceau")
-    instrument= params["instrument"][0]
-    self.figure.set_my_params("note", "toutes les notes")
-    self.figure.set_my_params("instrument", params["instrument"][0])
-    notes=Db().get_notes_instrument(instrument)
-    print(notes)
-    self.figure.set_my_params("notes", notes)
 
 
+      return string
+    except Exception as e:
+      return "<p>{erreur}</p>".format(erreur=(erreur+str(e)))
+  def render_collection(self,path,view,mycollection,as_,erreur):
+    try:
+      myview=open(os.path.abspath(path+"/"+view), "r").read()
+      string=""
+      count=0
+      print(len(mycollection),"my collection")
+      for res in mycollection:
+        for x in myview.split("<%="):
+           if "%>" not in x: 
+             string+=x
+             continue
+           else:
+             y=x.split("%>")
+             myexpr=y[0]
+             print(myexpr)
+             try:
+               mystr=y[1]
+             except:
+               mystr=""
+             try:
+               loc={as_: res}
+               print(loc)
+               string+=str(eval(myexpr, globals(), loc))
+             except:
+               string+=""
+             string+=mystr
 
-    return self
-  def tuner(self,params):
-    self.figure.set_content(Fichier("./music","tuner.html").lire())
-
-    self.figure.ajouter_a_mes_mots("sauver cet enregistrement dans cette page puis voir le morceau")
-    note= params["note"][0]
-    instrument= params["instrument"][0]
-    self.figure.set_my_params("note", params["note"][0])
-    self.figure.set_my_params("instrument", params["instrument"][0])
-    notes=Db().get_notes(params["instrument"][0], params["note"][0])
-    self.figure.set_my_params("notes", notes)
-
-    rate = 44100  # Sampling rate [samples/s].
-    n = 44100     # Length [samples].
-    f = 1000      # Frequency of the sine [Hz].
-    t = np.linspace(0, n / rate, n, endpoint=False)
-    
-    f=float(notes[0]["frequency"])
-    note1 = np.sin(2 * np.pi * f * t)
-    do=np.round(note1 * 32767).astype(np.int16)
-    write('./uploads/{instrument}_{note}.wav'.format(instrument=instrument, note=note), rate, do)
-
-
-    return self
-  def music(self,params):
-    self.figure.set_content(Fichier("./music","_form.html").lire())
-
-    self.figure.ajouter_a_mes_mots("sauver cet enregistrement dans cette page puis voir le morceau")
-    return self
-  def recording(self,params,mydata):
-    print(params, "params recording")
-
-    rec=Myrecording().new(mydata(self.recparams))
-    if rec.save():
-      print("uploaded and save...")
-    self.figure.set_content(Fichier("./welcome","index.html").lire())
-
-
-    return self
-
-
+      return string
+    except Exception as e:
+      return "<p>{erreur}</p>".format(erreur=(erreur+str(e)))
+  def render_body(self):
+    string=""
+    myinclude=False
+    for x in self.body.split("<%="):
+       print(x)
+       y=x.split("%>")
+       myexpr=y[0]
+       try:
+         mystr=y[1]
+         myinclude=True
+       except Exception as e:
+         mystr=""
+         myinclude=False
+       if myinclude:
+         try:
+           print(myexpr, "monexpression")
+           loc={"Mesmots":Mesmots,render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
+           exec("myres="+myexpr,globals(),loc)
+           if type(loc["myres"]) is bytes:
+             string+=loc["myres"].decode()
+           else:
+             string+=loc["myres"]
+         except Exception as e:
+           print(e,"m error")
+           string+=""
+         string+=mystr
+         myinclude=False
+       else:
+         string+=myexpr
+    self.body=string
+  def get_title(self):
+    return self.title
+  def get_headingone(self):
+    return self.title
+  def get_body(self):
+    return self.body
+  def set_json(self,mybody):
+    self.template=False
+    if len(mybody) > 0:
+      if type(mybody) is bytes:
+        print(mybody)
+        self.body+=str(mybody)
+      else:
+        self.body+=mybody
+    else:
+      self.body+=''
+  def set_body(self,mybody):
+      self.body=mybody
+  def set_content(self,mybody):
+    if len(mybody) > 0:
+      if type(mybody) is bytes:
+        print(mybody)
+        self.body+=str(mybody)
+      else:
+        self.body+=mybody
+    else:
+      self.body+=''
+  def ajouter_a_mes_mots(self,mot):
+    self.body += mot
+  def render_figure(self):
+    if self.template:
+      template=open(self.template,"r").read()
+      self.body= template.format(mots=self.get_headingone(),debutdemesmots=self.get_title(),partiedemesmot=self.get_body())
+    self.render_body()
+    return self.body

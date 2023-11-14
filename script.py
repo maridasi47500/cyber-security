@@ -25,10 +25,13 @@ import shutil
 import mimetypes
 import re
 import sys
-#try:
-#    from cStringIO import StringIO #except ImportError:
-#    from StringIO import StringIO
-ROUTE={"/":"hello#hi"}
+# my server
+import time, socket, threading
+from http.server import test as _test
+from socketserver     import ThreadingMixIn
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+        pass
+
 
 class S(BaseHTTPRequestHandler):
     def deal_post_data(self,uploads=False):
@@ -162,17 +165,29 @@ class S(BaseHTTPRequestHandler):
           #print(html)
           self.wfile.write(bytes(html))
 
-def run(server_class=HTTPServer, handler_class=S, port=8081):
-    logging.basicConfig(level=logging.INFO)
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    logging.info('Starting httpd...\n')
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    httpd.server_close()
-    logging.info('Stopping httpd...\n')
+#def run(server_class=HTTPServer, handler_class=S, port=8081):
+#    logging.basicConfig(level=logging.INFO)
+#    server_address = ('', port)
+#    httpd = server_class(server_address, handler_class)
+#    logging.info('Starting httpd...\n')
+#    try:
+#        httpd.serve_forever()
+#    except KeyboardInterrupt:
+#        pass
+#    httpd.server_close()
+#    logging.info('Stopping httpd...\n')
+def run(server_class=ThreadedHTTPServer, handler_class=S, port=8081):
+    #logging.basicConfig(level=logging.INFO)
+    #server_address = ('', port)
+    #httpd = server_class(server_address, handler_class)
+    #logging.info('Starting httpd...\n')
+    #try:
+    #    httpd.serve_forever()
+    #except KeyboardInterrupt:
+    #    pass
+    #httpd.server_close()
+    #logging.info('Stopping httpd...\n')
+    _test(handler_class,server_class)
 
 if __name__ == '__main__':
     from sys import argv

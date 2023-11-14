@@ -1,4 +1,5 @@
 from fichier import Fichier
+from mesmots import Mesmots
 import os
 from db import Db
 class Render():
@@ -104,7 +105,7 @@ class Render():
        if myinclude:
          try:
            print(myexpr, "monexpression")
-           loc={"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
+           loc={"Mesmots":Mesmots,"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
            exec("myres="+myexpr,globals(),loc)
            if type(loc["myres"]) is bytes:
              string+=loc["myres"].decode()

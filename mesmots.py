@@ -1,10 +1,11 @@
 import collections
 import urllib
 import re
+import urllib.request
 
 class Mesmots():
     def __init__(self,x):
-        self.mots=x
+        self.mots=x[0]
         self.res=[]
         self.nbres={}
         self.mesmots={"/email":"email mail mes emails boite mail mail google"}
@@ -13,7 +14,7 @@ class Mesmots():
         c = y.find('body').findAll(text=True, recursive=False)
         mystring=""
         for i in c:
-            print i
+            print(i)
             mystring+=i
             if len(mystring) > 100:
                 break
@@ -25,21 +26,28 @@ class Mesmots():
         if m:
             return m.group(1)
             return ""
-    def partiedemesmots(self):
+    def get_results(self):
+        print("hey results")
         for y in self.mots.split(" "):
             res=0
             for z in self.mesmots:
-                if self.nbres[z] is None:
-                    self.nbres[z]=0
-                if y in self.mesmots[z]:
-                    self.nbres[z]+=1
-        sorted_x = sorted(self.mesmots.items(), key=lambda kv: kv[1])
+                try:
+                   if y in self.mesmots[z]:
+                       self.nbres[z]+=1
+                except:
+                   if y in self.mesmots[z]:
+                       self.nbres[z]=1
+        sorted_x = sorted(self.nbres.items(), key=lambda kv: kv[1])
         sorted_dict = collections.OrderedDict(sorted_x)
+        print("my sorted dict",sorted_dict)
         for w in sorted_dict:
             if sorted_dict[w] > 0:
-                myurl = 'http://localhost:8081'+w
-                response = urllib.urlopen(myurl)  
+                myurl = 'http://localhost:8000'+w
+                print(myurl)
+                response = urllib.request.urlopen(myurl)  
+                print(response)
                 data = response.read()            
+                print(data)
                 title= self.gettitle(data)
                 mystring= self.getdescription(data)
                 self.res.insert(0,{"title":title, "description": mystring,"url": "/"})
