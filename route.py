@@ -16,13 +16,14 @@ r"/$":"Hello#hi",
 r"/?s=(.*?)$":"Hello#search",
 r"/bienvenue$":"Hello#hi",
 r"/email$":"Hello#email",
+r"/signup$":"Hello#signup",
 r"/create$":"Hello#create",
 r"/dates$":"Hello#dates",
 r"/mysum$":"Hello#mysum",
 r"/myshop$":"Hello#myshop",
 
 }
-  def get_route(self,myroute,myparams,mydata=None):
+  def get_route(self,myroute,myparams,mydata=None,session={}):
     print(myroute,myparams)
     print("myroute")
 
@@ -55,6 +56,9 @@ r"/myshop$":"Hello#myshop",
             print(mydata)
             print("=my data")
             loc["myparams"]=myparams
+            loc["mysession"]=session
+            loc["mydata"]=mydata
+            print("SESSION !",session)
             #loc["mydata"]=None
 
 
@@ -64,7 +68,8 @@ r"/myshop$":"Hello#myshop",
                 print(loc["myvar"].get_mydata())
                 print("=mydata")
 
-            exec("myvar=myvar.work(params=myparams)",globals(),loc)
+            exec("myvar=myvar.work(params=myparams, session=mysession,data=mydata)",globals(),loc)
+            exec("myvar.delete_notice()",globals(),loc)
 
             return loc["myvar"]
         mytext=(Erreur().err404())

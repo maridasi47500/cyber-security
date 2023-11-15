@@ -23,8 +23,66 @@ class Hello(Myfunc):
     print("hi there")
     return self
   def email(self,myscrit):
-    self.figure.set_content(Fichier("./welcome","email.html").lire())
+    self.figure.set_content(Fichier("./welcome","login.html").lire())
     self.figure.set_title("Se connecter à la boîte mail")
+    print("hi there")
+    return self
+  
+  def signup(self,myscrit):
+    try:
+      s=self.get_params()["s"][0]
+      print("MY ACTION",s)
+
+      self.figure.set_content(Fichier("./welcome","signup"+str(s)+".html").lire())
+    except Exception as e:
+      print("ERRIR MY ACTION",e)
+
+      try:
+        print("ERREUR 1")
+        if self.get_mydata_param("prenom") and self.get_mydata_param("nom"):
+          print("ERREUR 1")
+          self.set_session_param("prenom",self.get_mydata_param("prenom"))
+          print("ERREUR 1")
+          self.set_param("nom",self.get_mydata_param("nom"))
+
+          print("ERREUR 1")
+
+      except:
+        print("ok")
+
+        try:
+          print("ERREUR 2")
+          if self.get_mydata_param("datedenaissance") and self.get_mydata_param("genre"):
+            print("ERREUR 2")
+            print("ERREUR 2")
+            self.set_param("datedenaissance",self.get_mydata_param("datedenaissance"))
+            print("ERREUR 2")
+            self.set_param("genre",self.get_mydata_param("genre"))
+            print("ERREUR 2")
+
+        except Exception as e:
+          self.figure.set_content(str(e))
+
+          try:
+            if self.get_mydata_param("email"):
+              self.set_session_param("email",self.get_mydata_param("email"))
+              self.set_param("email",self.get_mydata_param("email"))
+
+          except Exception as e:
+            self.figure.set_content(str(e))
+
+            try:
+              if self.get_mydata_param("password") == self.get_mydata_param("password_confirmation"):
+                self.set_session_param("password",self.get_mydata_param("password"))
+                self.set_redirect("/hello")
+              else:
+                self.set_param("notice","les mot de passe ne sont pas identique")
+
+            except Exception as e:
+
+              self.figure.set_other_content(Fichier("./welcome","signup.html").lire())
+              self.figure.set_content(str(e))
+    self.figure.set_title("Créer un compte Google Mail")
     print("hi there")
     return self
   def myshop(self,myscrit):

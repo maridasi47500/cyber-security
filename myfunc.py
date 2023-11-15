@@ -16,11 +16,54 @@ class Myfunc():
     someparam={}
     my_params=figure.get_my_params()
     myattributes=[]
+    figure=False
+    params=False
     
     myprmogram=False
     run=False
     path=False
     runthisprogram=False
+    session=False
+    def set_param(self,x,y):
+        print("set param")
+        if not self.session:
+            self.session={}
+        self.set_session_param(x,y)
+        self.set_session_param("mysession",True)
+        self.figure.set_my_params(x,y)
+    def set_session_param(self,x,y):
+        print("set session")
+        if not self.session:
+            self.session={}
+        self.session[x]=y
+    def get_session_param(self,x):
+        return self.session[x]
+    def delete_session(self):
+        if not self.session:
+            self.session={}
+        for k in x:
+            self.session[k]=None
+    def get_session(self):
+        if not self.session:
+            self.session={}
+        return self.session
+    def set_my_session(self,x):
+        if not self.session:
+            self.session={}
+        for k in x:
+            self.session[k]=x[k]
+        self.session["mysession"]=False
+    def delete_notice(self):
+        if not self.session["mysession"]:
+          self.session["notice"]=None
+    def set_session(self,x):
+        if not self.session:
+            self.session={}
+        for k in x:
+            self.session[k]=x[k]
+        self.session["mysession"]=True
+    def set_someparam(self,x,y):
+        self.someparam[x]=y
     def set_someparam(self,x,y):
         self.someparam[x]=y
     def get_someparams(self):
@@ -45,6 +88,8 @@ class Myfunc():
         return self.redirect
     def set_mydata(self,x):
         self.mydata=x
+    def get_mydata_param(self,x):
+        return self.mydata[x]
     def get_mydata(self):
         return self.mydata
     def set_runthisprogram(self,run=False):
@@ -98,6 +143,10 @@ class Myfunc():
         return self.myattributes
     def set_uploads(self,name):
         self.upload=name
+    def set_params(self,x):
+        self.params=x
+    def get_params(self):
+        return self.params
     def get_uploads(self):
         return self.upload
     def get_upload(self):
@@ -106,8 +155,17 @@ class Myfunc():
         return self.get_figure().render_figure().encode()
     def file(self,params):
         print("frgthjk")
-    def work(self,params):
+    def work(self,params,session={},data={}):
         loc={"self":self, "params": params}
-        exec("myvar=self.{myfunc}(params)".format(myfunc=self.path), globals(), loc)
+
+        loc["session"]=session
+        loc["params"]=params
+        loc["data"]=data
+        exec("myvar=self", globals(), loc)
+
+        exec("myvar.set_my_session(session)", globals(), loc)
+        exec("myvar.set_mydata(data)", globals(), loc)
+        exec("myvar.set_params(params)", globals(), loc)
+        exec("myvar.{myfunc}(params)".format(myfunc=self.path), globals(), loc)
         return loc["myvar"]
 

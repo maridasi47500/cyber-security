@@ -141,15 +141,30 @@ class Render():
       self.template="./template/"+mybody
   def set_body(self,mybody):
       self.body=mybody
-  def set_content(self,mybody):
-    if len(mybody) > 0:
-      if type(mybody) is bytes:
-        print(mybody)
-        self.body+=str(mybody)
+  def set_other_content(self,mybody):
+    try:
+      if len(mybody) > 0:
+        if type(mybody) is bytes:
+          #print(mybody)
+          self.body=str(mybody)
+        else:
+          self.body=mybody
       else:
-        self.body+=mybody
-    else:
-      self.body+=''
+        self.body=''
+    except Exception as e: 
+      print("RENDER ERROR",e)
+  def set_content(self,mybody):
+    try:
+      if len(mybody) > 0:
+        if type(mybody) is bytes:
+          #print(mybody)
+          self.body+=str(mybody)
+        else:
+          self.body+=mybody
+      else:
+        self.body+=''
+    except Exception as e: 
+      print("RENDER ERROR",e)
   def ajouter_a_mes_mots(self,mot):
     self.body += mot
   def render_figure(self):

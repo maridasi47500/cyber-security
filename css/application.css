@@ -42,3 +42,10 @@ input[type="search"] {
 				        height: 20px;
 					    padding: 3px;
 				    }
+				    main.mycontent {
+					        text-align: center;
+					    }
+					    main form.loginform {
+						        margin: 0 auto;
+							    width: 300px;
+						    }

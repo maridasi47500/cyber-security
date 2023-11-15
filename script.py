@@ -29,6 +29,12 @@ import sys
 import time, socket, threading
 from http.server import test as _test
 from socketserver     import ThreadingMixIn
+import requests    
+from http.cookies import SimpleCookie
+
+
+s = requests.Session()
+
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
         pass
 
@@ -75,13 +81,15 @@ class S(BaseHTTPRequestHandler):
           #return (True, "Files uploaded")
           return myuploads
 
-    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False):
+    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False,cookies=False):
         if redirect:
           self.send_response(301)
           self.send_header('Location', redirect) 
           self.send_header('Status', "301 Moved Permanently") 
         else:
           self.send_response(200)
+        if cookies:
+          self.send_header('Set-Cookies', cookies)
         if pic:
           self.send_header('Content-type', 'image/'+pic)
         elif music:
@@ -102,6 +110,8 @@ class S(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
         params=parse_qs(parsed_path.query)
+        cookies = SimpleCookie(self.headers.get('Cookie'))
+
         if parsed_path.path.startswith("/echo"):
            message = '\n'.join([  'CLIENT VALUES:',
            'client_address=%s (%s)' % (self.client_address, self.address_string()),
@@ -123,9 +133,11 @@ class S(BaseHTTPRequestHandler):
            
            print(params)
            print("myparams")
-           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False)
+           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False,session=cookies)
 
-           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
+           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),cookies=myProgram.get_session())
+           for x in myProgram.get_session():
+               s.cookies[x]=myProgram.get_session()[x]
            
            print(myProgram, "y mrograù")
            html=myProgram.get_html()
@@ -135,6 +147,9 @@ class S(BaseHTTPRequestHandler):
     def do_POST(self):
 
         parsed_path = urllib.parse.urlparse(self.path)
+        params=parse_qs(parsed_path.query)
+        cookies = SimpleCookie(self.headers.get('Cookie'))
+
         #params=parse_qs(parsed_path.query)
         if self.path.startswith("/echo"):
           message = '\n'.join([  'CLIENT VALUES:',
@@ -158,8 +173,10 @@ class S(BaseHTTPRequestHandler):
           #params=parse_qs(post_data)
           logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                  str(self.path), str(self.headers), post_data)
-          myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams={},mydata=self.deal_post_data)
+          myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=self.deal_post_data,session=cookies)
           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
+          for x in myProgram.get_session():
+              s.cookies[x]=myProgram.get_session()[x]
           print(myProgram,post_data, "y mrograù")
           html=myProgram.get_html()
           #print(html)

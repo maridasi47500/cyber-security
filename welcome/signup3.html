@@ -1,7 +1,7 @@
 <p>bienvenue aux emails</p>
-<form class="loginform" action="/signup" method="post">
-	<div id="myroute">/signup?s=2</div>
-<table class="logintable">
+	<form class="loginform" action="/signup" method="post">
+		        <div id="myroute">/signup?s=4</div>
+			<table class="logintable">
 	<tr>
 		<td>
 			<span style="color: red">g</span><span style="color: yellow">O</span><span style="color: blue">O</span><span style="color: Yellow">G</span><span style="color: blue">L</span><span style="color: green">e</span>
@@ -14,17 +14,12 @@
 	</tr>
 	<tr>
 		<td>
-			Saisissez votre nom
+			Saisissez votre email
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<input name="prenom" type="text" placeholder="prénom"/>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input name="nom" type="text" placeholder="nom"/>
+			<input pattern="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+(@gmail.com)$/gmi" name="email" type="email" placeholder="date"/>
 		</td>
 	</tr>
 	<tr>

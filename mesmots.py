@@ -10,7 +10,9 @@ class Mesmots():
         print("mesmots", self.mots)
         self.res=[]
         self.nbres={}
-        self.mesmots={"/email":"email mail mes emails boite mail mail google"}
+        self.mesmots={"/email":"email mail connexion mes emails boite mail mail google",
+        "/signup":"email mail inscription mes emails boite mail mail google",
+                }
     def getdescription(self,data):
         y = BeautifulSoup(data)
         c = y.find('body').findAll(text=True, recursive=False)
