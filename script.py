@@ -41,46 +41,54 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 class S(BaseHTTPRequestHandler):
     def deal_post_data(self,uploads=False):
-        if uploads:
-          myuploads={}
-          ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
-          print(pdict)
-          try:
-            pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
-          except:
-            pdict['boundary'] = bytes("", "utf-8")
-          pdict['CONTENT-LENGTH'] = int(self.headers['Content-Length'])
-          print(ctype, "type of form")
-          if ctype == 'multipart/form-data':
-              form = cgi.FieldStorage( fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD':'POST', 'CONTENT_TYPE':self.headers['Content-Type'], })
-              print(type(form), "=====> DEAL_POST_DATA typemyform")
-              print(uploads, "===> uploads")
+        try:
+          if uploads:
+            myuploads={}
+            ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
+            print(pdict)
+            try:
+              pdict['boundary'] = bytes(pdict['boundary'], "utf-8")
+            except:
+              pdict['boundary'] = bytes("", "utf-8")
+            pdict['CONTENT-LENGTH'] = int(self.headers['Content-Length'])
+            print(ctype, "type of form",uploads)
+            print("bon formulaire " if ctype == 'multipart/form-data' else "mauvais formulaire")
+            if ctype == 'multipart/form-data':
+                print("hey")
+                form = cgi.FieldStorage( fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD':'POST', 'CONTENT_TYPE':self.headers['Content-Type'], })
+                print("ok")
+                print(form)
+                print(type(form), "=====> DEAL_POST_DATA typemyform")
+                print(uploads, "===> uploads")
 
-              if uploads:
-                for upload in uploads:
-                  try:
-                      print("check ", upload)
+                if uploads:
+                  for upload in uploads:
+                    try:
+                        print("check ", upload)
 
-                      try:
-                        if form[upload].filename:
-                          myuploads[upload]=form[upload]
-                        else:
-                          print("my name")
-                          print(form[upload].value)
-                          myuploads[upload]=form[upload].value
-                      except Exception as e:
-                          print(e)
-                          print("this name")
+                        try:
+                          if form[upload].filename:
+                            myuploads[upload]=form[upload]
+                          else:
+                            print("my name")
+                            print(form[upload].value)
+                            myuploads[upload]=form[upload].value
+                        except Exception as e:
+                            print("erreruer", e)
+                            print("this name")
 
-                          myuploads[upload]=form[upload].value
-                      finally:
-                          print("suivant", myuploads)
-                  except IOError:
-                          #return (False, "Can't create file to write, do you have permission to write?")
-                          return myuploads
-          #return (True, "Files uploaded")
-          return myuploads
-
+                            myuploads[upload]=form[upload].value
+                        finally:
+                            print("suivant", myuploads)
+                    except IOError as e:
+                        #return (False, "Can't create file to write, do you have permission to write?")
+                        print(e, "ok")    #return myuploads
+                    except Exception as e:
+                        #return (False, "Can't create file to write, do you have permission to write?")
+                        print(e, "ok 2e erreur")    #return myuploads
+            return myuploads
+        except Exception as e:
+            print(e, "erreeeur 11")
     def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False,cookies=False):
         if redirect:
           self.send_response(301)
@@ -108,6 +116,10 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        print("SEE MY COOKIEs==================================================================",s.cookies)
+        #for x in s.cookies:
+        #    print("SEE MY COOKIE==================================================================",x)
+        #    print("My cookie",s.cookies[x])
         parsed_path = urllib.parse.urlparse(self.path)
         params=parse_qs(parsed_path.query)
         cookies = SimpleCookie(self.headers.get('Cookie'))
@@ -133,7 +145,7 @@ class S(BaseHTTPRequestHandler):
            
            print(params)
            print("myparams")
-           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False,session=cookies)
+           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False,session=cookies,cookies=s.cookies)
 
            self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),cookies=myProgram.get_session())
            for x in myProgram.get_session():
@@ -173,10 +185,12 @@ class S(BaseHTTPRequestHandler):
           #params=parse_qs(post_data)
           logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                  str(self.path), str(self.headers), post_data)
-          myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=self.deal_post_data,session=cookies)
+          myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=self.deal_post_data,session=cookies,cookies=s.cookies)
           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
           for x in myProgram.get_session():
+              print("MY COOKIE==================================================================",x)
               s.cookies[x]=myProgram.get_session()[x]
+              print(myProgram.get_session()[x])
           print(myProgram,post_data, "y mrograù")
           html=myProgram.get_html()
           #print(html)

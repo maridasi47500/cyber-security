@@ -13,8 +13,10 @@ class Myfunc():
     myfile=False
     mydata=False
     myargs=False
+    mydatafunc=False
     someparam={}
     my_params=figure.get_my_params()
+    cookies=False
     myattributes=[]
     figure=False
     params=False
@@ -41,8 +43,10 @@ class Myfunc():
     def delete_session(self):
         if not self.session:
             self.session={}
-        for k in x:
-            self.session[k]=None
+        for k in self.session:
+            self.session[k]=""
+        self.session["mysession"]=True
+        self.session["notice"]=""
     def get_session(self):
         if not self.session:
             self.session={}
@@ -53,9 +57,10 @@ class Myfunc():
         for k in x:
             self.session[k]=x[k]
         self.session["mysession"]=False
+        self.session["notice"]=False
     def delete_notice(self):
         if not self.session["mysession"]:
-          self.session["notice"]=None
+          self.session["notice"]=""
     def set_session(self,x):
         if not self.session:
             self.session={}
@@ -155,17 +160,28 @@ class Myfunc():
         return self.get_figure().render_figure().encode()
     def file(self,params):
         print("frgthjk")
-    def work(self,params,session={},data={}):
+    def set_cookies(self,w):
+        self.cookies=w
+    def get_cookies(self):
+        return self.cookies
+    def set_mydatafunc(self,w):
+        self.mydatafunc=w
+    def get_mydatafunc(self):
+        return self.mydatafunc
+    def work(self,params,session={},data={},cookies=False):
         loc={"self":self, "params": params}
 
         loc["session"]=session
         loc["params"]=params
         loc["data"]=data
+        loc["cookies"]=cookies.get_dict()
         exec("myvar=self", globals(), loc)
 
         exec("myvar.set_my_session(session)", globals(), loc)
-        exec("myvar.set_mydata(data)", globals(), loc)
+        exec("myvar.set_mydatafunc(data)", globals(), loc)
+        exec("myvar.set_cookies(cookies)", globals(), loc)
         exec("myvar.set_params(params)", globals(), loc)
         exec("myvar.{myfunc}(params)".format(myfunc=self.path), globals(), loc)
+        exec("myvar.figure.set_session(myvar.get_session())", globals(), loc)
         return loc["myvar"]
 

@@ -10,7 +10,7 @@ return false;
     type: 'POST',
 
     // Form data
-    data: new FormData($('#myform')[0]),
+    data: new FormData($(this)[0]),
 
     // Tell jQuery not to process data or worry about content-type
     // You *must* include these options!

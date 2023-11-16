@@ -143,7 +143,7 @@ class Db():
       finally:
           if conn:
               conn.close()
-  def create_musicali(self,conn, project):
+  def find_user(self,project):
       """
       Create a new project into the projects table
       :param conn:
@@ -151,14 +151,35 @@ class Db():
       :return: project id
       """
       try:
-        sql = ''' INSERT OR IGNORE INTO musicalinstruments (name)
-                  VALUES(?) '''
+        sql = ''' select * from  users where email = ? and password = ?
+                   '''
         conn = sqlite3.connect(self.db)
         cur = conn.cursor()
         cur.execute(sql, project)
         conn.commit()
-        print(cur.lastrowid)
-        return cur.lastrowid
+        return cur.fetchone()
+        
+      except Error as e:
+        print(e)
+        return []
+      finally:
+          if conn:
+              conn.close()
+  def create_user(self,project):
+      """
+      Create a new project into the projects table
+      :param conn:
+      :param project:
+      :return: project id
+      """
+      try:
+        sql = ''' INSERT OR IGNORE INTO users (prenom,nom,datenaissance,genre,email,password)
+                  VALUES(?,?,?,?,?,?) '''
+        conn = sqlite3.connect(self.db)
+        cur = conn.cursor()
+        cur.execute(sql, project)
+        conn.commit()
+        return cur.fetchone()
       except Error as e:
         print(e)
         return []
@@ -197,11 +218,21 @@ class Db():
                                         price float NOT NULL,
                                         date date NOT NULL 
                                     ); """
+    sql2 = """ CREATE TABLE IF NOT EXISTS users (
+                                        id integer PRIMARY KEY autoincrement,
+                                        prenom text NOT NULL,
+                                        nom text NOT NULL,
+                                        datenaissance date NOT NULL,
+                                        genre string NOT NULL,
+                                        email string NOT NULL,
+                                        password string NOT NULL 
+                                    ); """
 
     self.create_connection(self.db)
     conn = sqlite3.connect(self.db)
     if conn is not None:
         self.create_table(conn,sql1)
+        self.create_table(conn,sql2)
         print("key")
         if conn:
             conn.close()

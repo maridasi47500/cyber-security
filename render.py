@@ -11,6 +11,11 @@ class Render():
     self.collection={}
     self.my_params={"myoutput":""}
     self.collection_string=""
+    self.session=False
+  def get_session(self):
+    return self.session
+  def set_session(self,s):
+    self.session=s
   def get_my_params(self):
     return self.my_params
   def set_my_params(self,name,param):
@@ -105,7 +110,7 @@ class Render():
        if myinclude:
          try:
            print(myexpr, "monexpression")
-           loc={"Mesmots":Mesmots,"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params}
+           loc={"Mesmots":Mesmots,"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params,"session":self.get_session()}
            exec("myres="+myexpr,globals(),loc)
            if type(loc["myres"]) is bytes:
              string+=loc["myres"].decode()
