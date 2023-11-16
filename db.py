@@ -155,9 +155,12 @@ class Db():
                    '''
         conn = sqlite3.connect(self.db)
         cur = conn.cursor()
+        cur.row_factory = sqlite3.Row
         cur.execute(sql, project)
         conn.commit()
-        return cur.fetchone()
+        x= cur.fetchone()
+        print(x)
+        return x
         
       except Error as e:
         print(e)

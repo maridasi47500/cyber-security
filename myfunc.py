@@ -40,11 +40,18 @@ class Myfunc():
         self.session[x]=y
     def get_session_param(self,x):
         return self.session[x]
+    def sign_out(self):
+        if not self.session:
+            self.session={}
+        for k in self.session:
+            self.session[k]=None
+        self.session["mysession"]=True
+        self.session["notice"]="deconnectée"
     def delete_session(self):
         if not self.session:
             self.session={}
         for k in self.session:
-            self.session[k]=""
+            self.session[k]=None
         self.session["mysession"]=True
         self.session["notice"]=""
     def get_session(self):
@@ -81,6 +88,8 @@ class Myfunc():
         return self.myargs
     def set_json(self,x):
         self.json=x
+        if x:
+            self.figure.set_body("")
     def get_json(self):
         return self.json
     def set_css(self,x):
@@ -174,14 +183,23 @@ class Myfunc():
         loc["session"]=session
         loc["params"]=params
         loc["data"]=data
-        loc["cookies"]=cookies.get_dict()
-        exec("myvar=self", globals(), loc)
+        print("THIS = MY COOKIES",cookies.get_dict())
+        x=cookies.get_dict()
+        try:
+            print(x["current_user"])
 
+        except:
+            x["current_user"]=None
+
+
+        loc["cookies"]=x
+        exec("myvar=self", globals(), loc)
         exec("myvar.set_my_session(session)", globals(), loc)
         exec("myvar.set_mydatafunc(data)", globals(), loc)
         exec("myvar.set_cookies(cookies)", globals(), loc)
+        exec("myvar.figure.set_session(cookies)", globals(), loc)
         exec("myvar.set_params(params)", globals(), loc)
         exec("myvar.{myfunc}(params)".format(myfunc=self.path), globals(), loc)
-        exec("myvar.figure.set_session(myvar.get_session())", globals(), loc)
+
         return loc["myvar"]
 

@@ -148,8 +148,15 @@ class S(BaseHTTPRequestHandler):
            myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False,session=cookies,cookies=s.cookies)
 
            self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),cookies=myProgram.get_session())
+           try:
+             if myProgram.get_session()["mysession"]:
+                 s.cookies.clear()
+           except:
+             print("tyui")
+
            for x in myProgram.get_session():
                s.cookies[x]=myProgram.get_session()[x]
+           s.cookies["clear"]=None
            
            print(myProgram, "y mrograù")
            html=myProgram.get_html()
@@ -187,10 +194,16 @@ class S(BaseHTTPRequestHandler):
                  str(self.path), str(self.headers), post_data)
           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=self.deal_post_data,session=cookies,cookies=s.cookies)
           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
+          try:
+             if myProgram.get_session()["mysession"]:
+                 s.cookies.clear()
+          except:
+             print("tyui")
           for x in myProgram.get_session():
               print("MY COOKIE==================================================================",x)
               s.cookies[x]=myProgram.get_session()[x]
               print(myProgram.get_session()[x])
+          s.cookies["clear"]=None
           print(myProgram,post_data, "y mrograù")
           html=myProgram.get_html()
           #print(html)

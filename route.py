@@ -1,5 +1,6 @@
 import re
 from hello import Hello
+from email import Email
 from search import Search
 from erreur import Erreur
 from mypic import Pic
@@ -18,9 +19,10 @@ r"/bienvenue$":"Hello#hi",
 r"/email$":"Hello#email",
 r"/signup$":"Hello#signup",
 r"/login$":"Hello#signin",
-r"/hello$":"Hello#voiremail",
+r"/hello$":"Email#voiremail",
 r"/create$":"Hello#create",
 r"/dates$":"Hello#dates",
+r"/signout$":"Hello#signout",
 r"/mysum$":"Hello#mysum",
 r"/myshop$":"Hello#myshop",
 

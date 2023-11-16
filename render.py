@@ -42,7 +42,7 @@ class Render():
            else:
              y=x.split("%>")
              myexpr=y[0]
-             print(myexpr)
+             #print(myexpr)
              try:
                mystr=y[1]
              except:
@@ -78,7 +78,7 @@ class Render():
            else:
              y=x.split("%>")
              myexpr=y[0]
-             print(myexpr)
+             #print(myexpr)
              try:
                mystr=y[1]
              except:
@@ -98,7 +98,7 @@ class Render():
     string=""
     myinclude=False
     for x in self.body.split("<%="):
-       print(x)
+       #print(x)
        y=x.split("%>")
        myexpr=y[0]
        try:
@@ -109,7 +109,7 @@ class Render():
          myinclude=False
        if myinclude:
          try:
-           print(myexpr, "monexpression")
+           #print(myexpr, "monexpression")
            loc={"Mesmots":Mesmots,"render_collection_json":self.render_collection_json,"self": self,"Db":Db,"render_collection":self.render_collection, "my_params":self.my_params,"session":self.get_session()}
            exec("myres="+myexpr,globals(),loc)
            if type(loc["myres"]) is bytes:
@@ -136,7 +136,7 @@ class Render():
     self.template=False
     if len(mybody) > 0:
       if type(mybody) is bytes:
-        print(mybody)
+        #print(mybody)
         self.body+=str(mybody)
       else:
         self.body+=mybody

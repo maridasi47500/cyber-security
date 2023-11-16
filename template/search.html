@@ -33,9 +33,7 @@
 											              </div></a>
 													        </li>
 																																								      </ul>
-																																								            <form class="d-flex" action="/email">
-																																											            <input name="connexion" value="Connexion" class="btn btn-outline-success" type="submit"></input>
-																																												          </form>
+																																								      <%=Fichier("./welcome",("connect" if session["current_user"] is None else "deconnect")+".html").lire()%>
 
 																																													      </div>
 																																													        </div>

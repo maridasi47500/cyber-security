@@ -8,7 +8,7 @@ from myrecording import Myrecording
 class Hello(Myfunc):
   def __init__(self,path):
     self.path=path
-    self.title="my thrift shop"
+    self.title="Google Mail"
     self.figure=Render(self.title)
     self.recparams=["name","image","price","date"]
     self.userparams=["nom","prenom","datenaissance","genre","email","password","password_confirmation"]
@@ -18,6 +18,13 @@ class Hello(Myfunc):
     self.set_json(True)
     self.figure.set_body("")
     self.figure.set_json(Fichier("./welcome","date.json").lire())
+    print("hi there")
+    return self
+  def signout(self,myscrit):
+    self.delete_session()
+    print("SIGNOUT SESSION",self.get_session())
+    self.set_redirect("/")
+    self.figure.set_content(Fichier("./welcome","new.html").lire())
     print("hi there")
     return self
   def new(self,myscrit):
@@ -52,6 +59,7 @@ class Hello(Myfunc):
           print("ERREUR 1")
       except:
         print("ok")
+
         try:
           if self.get_mydata_param("password"):
             pw=self.get_mydata_param("password")
@@ -60,17 +68,21 @@ class Hello(Myfunc):
             print((s["email"],pw))
             user=Db().find_user((s["email"],pw))
             if user:
+              self.set_json(True)
               current_user=user["prenom"]+" "+user["nom"]
               email=user["email"]
               self.delete_session()
               self.set_session_param("current_user",current_user)
               self.set_session_param("current_email",email)
+              self.figure.set_json(Fichier("./welcome","_connecte.json").lire())
               self.set_session_param("notice","vous etes connecté")
             else:
               self.set_session_param("notice","l'utilisateur ou mot de passe incorrect")
+              self.figure.set_json(Fichier("./welcome","_pasconnecte.json").lire())
           else:
             self.set_param("notice","les mot de passe ne sont pas identique")
         except Exception as e:
+          print(e)
           self.figure.set_other_content(Fichier("./welcome","login.html").lire())
           self.figure.set_content(str(e))
     self.figure.set_title("Se connecter àson Google Mail")
@@ -136,6 +148,7 @@ class Hello(Myfunc):
                 current_user=s["prenom"]+" "+s["nom"]
                 email=s["email"]
                 self.delete_session()
+
                 self.set_session_param("current_user",current_user)
                 self.set_session_param("current_email",email)
               else:
