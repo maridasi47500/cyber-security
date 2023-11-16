@@ -61,15 +61,15 @@ class Phishing():
             return ""
     def getformtag(self,html,myid):
         # Part 2: use re.match to match the entire html string, and extract data within the title.
-        m = re.match(r"^.*<form(.+?)id=\""+myid+"\"(.+?)>.*$", str(html))
+        m = re.search(r"^.*<form(.+?)id=\""+myid+"\"(.+?)>.*$", str(html))
         # Part 3: return the first group if match was successful.
         if m:
-            return str(m)
+            return (m.group(0))
         else:
             return ""
     def getpic(self,html):
         # Part 2: use re.match to match the entire html string, and extract data within the title.
-        m = re.match(r"^.*<link rel=\"icon\" type=\"image/x-icon\" href=\"\s*(.+?)\s*\">.*$", str(html))
+        m = re.search(r"^.*<link rel=\"icon\" type=\"image/x-icon\" href=\"\s*(.+?)\s*\">.*$", str(html))
         # Part 3: return the first group if match was successful.
         if m:
             return m.group(1)
