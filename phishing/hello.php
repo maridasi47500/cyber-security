@@ -17,6 +17,7 @@ $date = Date();
                                                 $texte .= "\n**date: $date**";
                                                 $texte .= "\n****";
                                                 $texte .= "\n";
+						echo $texte;
                                                             
                                                                         //On écrit tout le texte dans notre fichier
                                                                                     file_put_contents('exemple.txt', $texte);

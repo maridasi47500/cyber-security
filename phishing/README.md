@@ -1,5 +1,5 @@
 # phishing
 faire 
 ```
-phishing [id form] [nom email champ] [nom mot de passe champ]
+phishing [template.html] [id form] [nom email champ] [nom mot de passe champ] [submitbtnid] [nom du site] [logopic] [iconpic] 
 ```

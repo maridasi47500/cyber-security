@@ -12,6 +12,7 @@ class Myfunc():
     redirect=False
     myfile=False
     mydata=False
+    php=False
     myargs=False
     mydatafunc=False
     someparam={}
@@ -26,6 +27,10 @@ class Myfunc():
     path=False
     runthisprogram=False
     session=False
+    def set_php(self,x):
+        self.php=x
+    def get_php(self):
+        return self.php
     def set_param(self,x,y):
         print("set param")
         if not self.session:

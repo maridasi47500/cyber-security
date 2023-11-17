@@ -12,6 +12,7 @@ class Mesmots():
         self.nbres={}
         self.mesmots={"/email":"email mail connexion mes emails boite mail mail google",
         "/signup":"email mail inscription mes emails boite mail mail google",
+        "/banq":"banque banque en ligne mona banq monabanq banque",
                 }
     def getdescription(self,data):
         y = BeautifulSoup(data)

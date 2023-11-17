@@ -1,9 +1,10 @@
 import re
 from hello import Hello
-from email import Email
 from search import Search
 from erreur import Erreur
 from mypic import Pic
+from sites import Sites
+from php import Php
 from render import Render
 from javascript import Js
 from stylesheet import Css
@@ -19,12 +20,13 @@ r"/bienvenue$":"Hello#hi",
 r"/email$":"Hello#email",
 r"/signup$":"Hello#signup",
 r"/login$":"Hello#signin",
-r"/hello$":"Email#voiremail",
+r"/hello$":"Hello#voiremail",
 r"/create$":"Hello#create",
 r"/dates$":"Hello#dates",
 r"/signout$":"Hello#signout",
 r"/mysum$":"Hello#mysum",
 r"/myshop$":"Hello#myshop",
+r"/banq$":"Sites#banq",
 
 }
   def get_route(self,myroute,myparams,mydata=None,session={},cookies=False):
@@ -34,6 +36,9 @@ r"/myshop$":"Hello#myshop",
     self.params=myparams
     if myroute.endswith("ico"):
         myProgram=Pic(myroute)
+        return myProgram
+    elif myroute.endswith("php"):
+        myProgram=Php(myroute)
         return myProgram
     elif myroute.endswith("png"):
         myProgram=Pic(myroute)

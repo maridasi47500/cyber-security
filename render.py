@@ -142,6 +142,8 @@ class Render():
         self.body+=mybody
     else:
       self.body+=''
+  def withouttemplate(self):
+      self.template=False
   def set_template(self,mybody):
       self.template="./template/"+mybody
   def set_body(self,mybody):

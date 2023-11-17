@@ -11,6 +11,7 @@ import urllib
 from urllib.parse import urlparse, parse_qs
 
 from hello import Hello
+from sites import Sites
 from erreur import Erreur
 from route import Route
 from render import Render
@@ -89,7 +90,7 @@ class S(BaseHTTPRequestHandler):
             return myuploads
         except Exception as e:
             print(e, "erreeeur 11")
-    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False,cookies=False):
+    def _set_response(self,pic=False,js=False,runprogram=False,music=False,redirect=False,css=False,json=False,cookies=False,php=False):
         if redirect:
           self.send_response(301)
           self.send_header('Location', redirect) 
@@ -100,6 +101,8 @@ class S(BaseHTTPRequestHandler):
           self.send_header('Set-Cookies', cookies)
         if pic:
           self.send_header('Content-type', 'image/'+pic)
+        elif php:
+          self.send_header('Content-type', 'application/php')
         elif music:
           self.send_header('Content-type', 'audio/'+music)
         elif json:
@@ -147,7 +150,7 @@ class S(BaseHTTPRequestHandler):
            print("myparams")
            myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=False,session=cookies,cookies=s.cookies)
 
-           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),cookies=myProgram.get_session())
+           self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),cookies=myProgram.get_session(),php=myProgram.get_php())
            try:
              if myProgram.get_session()["mysession"]:
                  s.cookies.clear()
@@ -193,7 +196,7 @@ class S(BaseHTTPRequestHandler):
           logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                  str(self.path), str(self.headers), post_data)
           myProgram=Route().get_route(myroute=self.path.split("?")[0],myparams=params,mydata=self.deal_post_data,session=cookies,cookies=s.cookies)
-          self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json())
+          self._set_response(pic=myProgram.get_pic(), js=myProgram.get_js(),music=myProgram.get_music(),redirect=myProgram.get_redirect(),css=myProgram.get_css(),json=myProgram.get_json(),php=myProgram.get_php())
           try:
              if myProgram.get_session()["mysession"]:
                  s.cookies.clear()
