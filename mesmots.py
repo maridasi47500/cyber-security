@@ -26,10 +26,10 @@ class Mesmots():
         return mystring
     def getpic(self,html):
         # Part 2: use re.match to match the entire html string, and extract data within the title.
-        m = re.match(r"^.*<link rel=\"icon\" type=\"image/x-icon\" href=\"\s*(.+?)\s*\">.*$", str(html))
+        m = re.search(r"^.*<link rel=\"icon\"(.*?)href=\"\s*(.+?)\s*\".*$", str(html))
         # Part 3: return the first group if match was successful.
         if m:
-            return m.group(1)
+            return m.groups()[1]
         else:
             return ""
     def gettitle(self,html):
